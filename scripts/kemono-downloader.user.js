@@ -63,8 +63,8 @@ const downloadImages = function () {
     };
 
     const handleError = function (err, image, numRetries = 1) {
-        if (err.error === "Too Many Requests" && numRetries <= 5) {
-            console.log(`Too many requests on ${image.name}. Retry ${numRetries}`);
+        if ((err.error === "Too Many Requests" || "xhr_failed") && numRetries <= 5) {
+            console.log(`Error downloading ${image.name}. Retry ${numRetries}`);
             setTimeout(
                 () => {
                     // eslint-disable-next-line no-undef
