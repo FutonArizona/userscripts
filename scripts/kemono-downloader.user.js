@@ -4,6 +4,7 @@
 // @namespace    kemono.party
 // @version      1.0.0
 // @include      /^https:\/\/kemono\.party\/(patreon|fanbox|subscribestar|gumroad|fantia)\/user\/(\d+|\w+)\/post\/[0-9A-Z]+$/
+// @include      /^https:\/\/kemono\.su\/(patreon|fanbox|subscribestar|gumroad|fantia)\/user\/(\d+|\w+)\/post\/[0-9A-Z]+$/
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=kemono.party
 // @grant        GM_download
 // @run-at       document-end
