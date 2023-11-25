@@ -2,7 +2,7 @@
 // @name         Kemono Image Downloader
 // @description  Downloads all images from a post
 // @namespace    kemono.party
-// @version      1.0.0
+// @version      1.0.1
 // @include      /^https:\/\/kemono\.party\/(patreon|fanbox|subscribestar|gumroad|fantia)\/user\/(\d+|\w+)\/post\/[0-9A-Z]+$/
 // @include      /^https:\/\/kemono\.su\/(patreon|fanbox|subscribestar|gumroad|fantia)\/user\/(\d+|\w+)\/post\/[0-9A-Z]+$/
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=kemono.party
@@ -24,13 +24,13 @@ const replaceSpecialCharacters = function (text) {
 };
 
 // Get all elements with the class "post__thumbnail"
-const thumbnails = document.querySelectorAll(".post__thumbnail");
+const thumbnails = document.getElementsByClassName("post__thumbnail");
 
 const images = new Map();
 
 // Loop through the thumbnails and add the label to each one
 for (const thumbnail of thumbnails) {
-    const fileAttr = thumbnail.firstElementChild;
+    const fileAttr = thumbnail.firstElementChild.firstElementChild;
     const downloadUrl = fileAttr.attributes.getNamedItem("href").value;
     const fileName = replaceSpecialCharacters(fileAttr.attributes.getNamedItem("download").value);
 
