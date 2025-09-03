@@ -1,0 +1,10 @@
+{
+    "name": "Kemono Downloader",
+    "description": "Download images and attachments from posts on Kemono",
+    "version": "2.0.0",
+    "namespace": "kemono",
+    "match": "*://kemono.cr/*",
+    "iconURL": " https://www.google.com/s2/favicons?sz=64&domain=kemono.party",
+    "run-at": "document-start",
+    "grant": ["window.onurlchange", "GM_download", "GM_notification"]
+}

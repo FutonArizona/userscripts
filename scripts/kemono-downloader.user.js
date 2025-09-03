@@ -1,134 +1,16 @@
 // ==UserScript==
-// @name         Kemono Image Downloader
-// @description  Downloads all images from a post
-// @namespace    kemono.party
-// @version      1.0.1
-// @include      /^https:\/\/kemono\.party\/(patreon|fanbox|subscribestar|gumroad|fantia)\/user\/(\d+|\w+)\/post\/[0-9A-Z]+$/
-// @include      /^https:\/\/kemono\.su\/(patreon|fanbox|subscribestar|gumroad|fantia)\/user\/(\d+|\w+)\/post\/[0-9A-Z]+$/
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=kemono.party
-// @grant        GM_download
-// @run-at       document-end
+// @name        Kemono Downloader
+// @description Download images and attachments from posts on Kemono
+// @namespace   kemono
+// @version     2.0.0
+// @match       *://kemono.cr/*
+// @iconURL     https://www.google.com/s2/favicons?sz=64&domain=kemono.party
+// @run-at      document-start
+// @downloadURL https://github.com/FutonArizona/userscripts/raw/master/scripts/kemono-downloader.user.js
+// @updateURL   https://github.com/FutonArizona/userscripts/raw/master/scripts/kemono-downloader.user.js
+// @grant       window.onurlchange
+// @grant       GM_download
+// @grant       GM_notification
 // ==/UserScript==
 
-let downloadedCount = 0;
-let errorCount = 0;
-
-const replaceSpecialCharacters = function (text) {
-    let newText = text;
-    newText = newText.replaceAll("%20", " ");
-    newText = newText.replaceAll("%23", "#");
-    newText = newText.replaceAll("%26", "&");
-    newText = newText.replaceAll("%28", "(");
-    newText = newText.replaceAll("%29", ")");
-    return newText;
-};
-
-// Get all elements with the class "post__thumbnail"
-const thumbnails = document.getElementsByClassName("post__thumbnail");
-
-const images = new Map();
-
-// Loop through the thumbnails and add the label to each one
-for (const thumbnail of thumbnails) {
-    const fileAttr = thumbnail.firstElementChild.firstElementChild;
-    const downloadUrl = fileAttr.attributes.getNamedItem("href").value;
-    const fileName = replaceSpecialCharacters(fileAttr.attributes.getNamedItem("download").value);
-
-    // Create a new label element and set its text and style
-    const label = document.createElement("span");
-    label.textContent = fileName;
-    label.style.display = "inline-block";
-    label.style.position = "absolute";
-    label.style.top = "0";
-    label.style.left = "0";
-    label.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-    label.style.color = "white";
-    label.style.padding = "4px";
-
-    // Add the label to the thumbnail element
-    thumbnail.style.position = "relative";
-    thumbnail.insertBefore(label, thumbnail.firstChild);
-
-    images.set(downloadUrl, fileName);
-}
-
-const downloadImages = function () {
-    const updateButton = function (increment = true) {
-        const button = document.getElementById("kemono-download-button");
-        if (increment) {
-            downloadedCount += 1;
-        }
-        button.textContent = `Downloaded ${downloadedCount}/${images.size} Images${
-            errorCount > 0 ? `. Errors: ${errorCount}` : ""
-        }`;
-    };
-
-    const handleError = function (err, image, numRetries = 1) {
-        if ((err.error === "Too Many Requests" || "xhr_failed") && numRetries <= 5) {
-            console.log(`Error downloading ${image.name}. Retry ${numRetries}`);
-            setTimeout(
-                () => {
-                    // eslint-disable-next-line no-undef
-                    GM_download({
-                        url: image.url,
-                        name: image.name,
-                        onerror: (error) => handleError(error, image, (numRetries += 1)),
-                        onload: updateButton,
-                    });
-                },
-                numRetries ** 2 * 1000,
-            );
-        } else {
-            errorCount += 1;
-            console.log("Error downloading image", { err, image });
-        }
-    };
-
-    updateButton(false);
-
-    for (const image of images) {
-        const imageObj = { name: image[1], url: image[0] };
-        console.log(`Downloading ${imageObj.name}`);
-        // eslint-disable-next-line no-undef
-        GM_download({
-            url: imageObj.url,
-            name: imageObj.name,
-            onerror: (error) => handleError(error, imageObj),
-            onload: updateButton,
-        });
-    }
-
-    const interval = setInterval(() => {
-        if (downloadedCount + errorCount < images.size) {
-            return;
-        }
-        clearInterval(interval);
-
-        alert(
-            `Downloaded ${downloadedCount} of ${images.size} image${
-                images.size === 1 ? "" : "s"
-            } with ${errorCount} error${errorCount === 1 ? "" : "s"}`,
-        );
-    }, 100);
-
-    downloadedCount = 0;
-    errorCount = 0;
-};
-
-// create a button element
-const button = document.createElement("button");
-button.textContent = `Download ${images.size} Images`; // set the text content of the button
-
-// find the first element with class name "post__body"
-const postBody = document.getElementsByClassName("post__body")[0];
-
-// add CSS styles to the button element
-button.id = "kemono-download-button";
-button.style.position = "relative";
-button.style.float = "right";
-
-// add a click event listener to the button element
-button.addEventListener("click", downloadImages);
-
-// insert the button before the first child of the postBody element
-postBody.insertBefore(button, postBody.firstChild);
+class o{files;downloadedFiles;failedFiles;downloadButton;postAPI;constructor(o){this.files=[],this.downloadedFiles=[],this.failedFiles=[],this.postAPI=o.origin+"/api/v1"+o.pathname}}let t=new o(document.location);async function e(){let o;try{o=await async function(){const o=await fetch(t.postAPI);if(!o.ok)throw new Error("Error getting post");return await o.json()}()}catch(o){return console.error("Error getting post",o),void GM_notification({text:"ERROR: Failed to get post data",timeout:0})}if(console.log("Got post:",{post:o}),t.files=function(o){const t={};for(const e of o.attachments){t[e.server+"/data"+e.path]=e.name}for(const e of o.previews){if("thumbnail"!==e.type)continue;t[e.server+"/data"+e.path]=e.name}const e=[];for(const[o,n]of Object.entries(t))e.push({URL:o,Name:n});return e}(o),t.files.length){if(console.log("Got files:",{files:t.files}),t.downloadButton=await async function(){let o;for(;!o;o=document.getElementsByClassName("post__body")[0])await a(100);const e=document.createElement("button");return e.textContent=`Download ${t.files.length} Files`,e.id="kemono-download-button",e.style.position="relative",e.style.float="right",e.addEventListener("click",l),o.insertBefore(e,o.firstChild)}(),!t.downloadButton)return console.error("Failed to create download button"),void GM_notification({text:"ERROR: Failed to create download button",timeout:0});console.log("Created download button",{downloadButton:t.downloadButton})}else console.log("No files in post. Exiting")}function n(){t.downloadButton?t.downloadButton.textContent=t.downloadButton.disabled?`Downloading Files... ${t.downloadedFiles.length}/${t.files.length}`:`Download ${t.files.length} Files`:console.error("Download button is undefined")}async function l(){if(t.downloadButton){t.downloadButton.disabled=!0,n();for(const o of t.files)i(o);for(;t.downloadedFiles.length+t.failedFiles.length<t.files.length;)await a(500);console.log("Download Complete",{downloadedFiles:t.downloadedFiles,failedFiles:t.failedFiles}),GM_notification({text:`Download Complete:\nSuccess Count: ${t.downloadedFiles.length}\nFailure Count: ${t.failedFiles.length}`,timeout:5e3}),t.downloadedFiles=[],t.failedFiles=[],t.downloadButton.disabled=!1,n()}else console.error("Download button is undefined")}async function i(o,e=0){e>3?t.failedFiles.push(o):(await a(e**2*1e3),GM_download({url:o.URL,name:o.Name,onerror:()=>i(o,e+1),onload:()=>{t.downloadedFiles.push(o),n()}}))}function a(o){return new Promise(t=>{setTimeout(t,o)})}async function d(){t.downloadButton?.remove();const n=document.location.pathname.match(/\/user\/\d+\/post\/\d+/);n?.length&&(t=new o(document.location),await e())}window.addEventListener("urlchange",async()=>{await d()}),async function(){await d()}();

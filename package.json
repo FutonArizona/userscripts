@@ -1,27 +1,36 @@
 {
-  "name": "userscripts",
-  "version": "1.0.0",
-  "description": "Misc. Userscripts",
-  "scripts": {
-    "prepare": "husky install",
-    "lint": "eslint -c .eslintrc.json src/",
-    "lint-fix": "eslint --fix -c .eslintrc.json src/",
-    "prettier-check": "prettier --check -c .prettierrc.json src/",
-    "prettier": "prettier --write -c .prettierrc.json src/"
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "devDependencies": {
-    "eslint": "^8.50.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-userscripts": "^0.4.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
-    "prettier": "^3.0.3"
-  },
-  "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
-  }
+    "name": "userscripts",
+    "version": "1.0.0",
+    "description": "Misc. Userscripts",
+    "scripts": {
+        "prepare": "husky",
+        "lint": "eslint -c eslint.confg.js src/",
+        "lint-fix": "eslint --fix -c eslint.confg.js src/",
+        "prettier-check": "prettier --check -c .prettierrc.json src/",
+        "prettier": "prettier --write -c .prettierrc.json src/"
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "type": "module",
+    "devDependencies": {
+        "@eslint/js": "^9.23.0",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@types/tampermonkey": "^5.0.4",
+        "eslint": "^9.23.0",
+        "eslint-config-prettier": "^10.1.1",
+        "globals": "^16.0.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.5.0",
+        "prettier": "^3.5.3",
+        "rollup": "^4.38.0",
+        "rollup-plugin-userscript-metablock": "^0.4.2",
+        "typescript": "^5.8.2"
+    },
+    "lint-staged": {
+        "src/**/*.{js,cjs,mjs,ts,json}": [
+            "eslint --cache --fix -c eslint.config.js",
+            "prettier --write --config '.prettierrc.json'"
+        ]
+    }
 }
