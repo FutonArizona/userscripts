@@ -223,7 +223,7 @@ function wait(ms) {
 
 async function init() {
     downloader.downloadButton?.remove();
-    const urlMatch = document.location.pathname.match(/\/user\/\d+\/post\/\d+/);
+    const urlMatch = document.location.pathname.match(/\/user\/[a-zA-Z0-9_]+\/post\/\d+/);
     if (urlMatch?.length) {
         downloader = new KemonoDownloader(document.location);
         await main();
