@@ -1,0 +1,9 @@
+[tools]
+node = "22"
+
+[env]
+_.path = ['{{config_root}}/node_modules/.bin']
+
+[tasks.build]
+description = "Build the userscripts with Rollup"
+run = "rollup -c rollup.config.js"

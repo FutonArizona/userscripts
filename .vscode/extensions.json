@@ -2,7 +2,6 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "eamodio.gitlens",
-        "andywang.vscode-scriptmonkey"
+        "eamodio.gitlens"
     ]
 }
