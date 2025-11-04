@@ -1,0 +1,10 @@
+{
+    "name": "Nexus Mods Collections Remover",
+    "description": "Deletes the 'Collections' header from the Nexus Mods homepage",
+    "version": "1.0.0",
+    "namespace": "nexusmods",
+    "match": "*://*.nexusmods.com/*",
+    "icon": "https://www.google.com/s2/favicons?sz=64&domain=nexusmods.com",
+    "run-at": "document-start",
+    "grant": ["window.onurlchange"]
+}

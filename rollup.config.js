@@ -12,6 +12,14 @@ export default [
         outputFileName: "kemono-downloader.user.js",
         minify: true,
     }),
+
+    // Nexus Mods Collections Remover
+    newUserscript({
+        mainFilePath: "nexusmods-collections-remover/main.js",
+        metadataJSONPath: "nexusmods-collections-remover/metadata.json",
+        outputFileName: "nexusmods-collections-remover.user.js",
+        minify: false,
+    }),
 ];
 
 /**
