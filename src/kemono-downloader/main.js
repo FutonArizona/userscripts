@@ -87,13 +87,14 @@ function extractFilesFromPost(post) {
     const fileMap = {};
 
     // Extract file URL & name from attachments
-    for (const attachment of post.attachments) {
-        const fileURL = attachment.server + "/data" + attachment.path;
+    for (const attachment of post.attachments ?? []) {
+        const baseURL = attachment.server ?? location.protocol + "//file." + location.host;
+        const fileURL = baseURL + "/data" + attachment.path;
         fileMap[fileURL] = attachment.name;
     }
 
     // Extract file URL & name from previews
-    for (const preview of post.previews) {
+    for (const preview of post.previews ?? []) {
         if (preview.type !== "thumbnail") {
             continue;
         }
