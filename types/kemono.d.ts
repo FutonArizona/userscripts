@@ -471,6 +471,7 @@ declare namespace Kemono {
      */
     interface GetPostResponse {
         post: Post;
+        file: Attachment;
         attachments: Array<Attachment>;
         previews: Array<Preview>;
         videos: Array<Video>;
