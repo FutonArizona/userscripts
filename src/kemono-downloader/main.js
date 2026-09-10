@@ -86,8 +86,10 @@ function extractFilesFromPost(post) {
     /** @type {Record<string, string>} */
     const fileMap = {};
 
-    const previewURL = location.protocol + "//file." + location.host + "/data" + post.file.path;
-    fileMap[previewURL] = post.file.name;
+    if (post.file?.path) {
+        const previewURL = location.protocol + "//file." + location.host + "/data" + post.file.path;
+        fileMap[previewURL] = post.file.name;
+    }
 
     // Extract file URL & name from attachments
     for (const attachment of post.attachments ?? []) {

@@ -1,10 +1,10 @@
 {
-    "name": "Kemono Downloader",
+    "name": "Pawchive Downloader",
     "description": "Download images and attachments from posts on Kemono, Coomer, and Pawchive",
-    "version": "2.2.2",
+    "version": "2.2.3",
     "namespace": "kemono",
     "match": ["*://kemono.cr/*", "*://coomer.st/*", "*://pawchive.st/*", "*://pawchive.pw/*"],
-    "iconURL": " https://www.google.com/s2/favicons?sz=64&domain=kemono.party",
+    "iconURL": " https://www.google.com/s2/favicons?sz=64&domain=pawchive.st",
     "run-at": "document-start",
     "grant": ["window.onurlchange", "GM_download", "GM_notification"],
     "noframes": true
